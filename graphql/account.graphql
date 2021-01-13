@@ -1,0 +1,39 @@
+enum TYPE_ACCOUNT
+{
+  income,
+  expense
+}
+
+type Account
+{
+  id: ID! 
+  name: String!
+  description: String
+  company_id: Company! @belongsTo(relation: "company")
+  currency_id: Currency! @belongsTo(relation: "currency")
+  parent_id: ID 
+  # sales: [Sale!]! @hasMany(type: "paginator")
+  type: TYPE_ACCOUNT!
+}
+
+input accountUpsert
+{
+  company_id: ID! @rules(apply: ["belongsToMe:companies"])
+  currency_id: ID!
+  parent_id: ID
+  type: TYPE_ACCOUNT!
+  name: String!
+  description: String
+}
+
+extend type Query
+{
+  accounts: [Account!]! @paginate(defaultCount: 10) @admin
+}
+
+extend type Mutation
+{
+  accountCreate(input: accountUpsert! @spread): Account! @create
+  accountUpdate(id: ID! @rules(apply: ["belongsToMe:accounts"]), input: accountUpsert! @spread): Account! @update
+  accountDelete(id: ID! @rules(apply: ["belongsToMeThrough:accounts"]) @eq): Account @delete
+}

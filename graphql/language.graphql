@@ -1,0 +1,21 @@
+type Language 
+{
+  id: ID!
+  name: String!
+  abbreviation: String!
+  users: [User!]! @hasMany(relation: "users")
+  created_at: Date!
+  updated_at: Date!
+}
+
+extend type Query
+{
+  languages: [Language!]! @all
+}
+
+extend type Mutation
+{
+  languageCreate(name: String!, abbreviation: String! @spread): Language! @create @admin
+  languageUpdate(id: ID!, name: String!, abbreviation: String! @spread): Language! @update @admin
+  languageDelete(id: ID! @eq): Language @delete @admin
+}

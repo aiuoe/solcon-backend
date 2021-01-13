@@ -1,0 +1,48 @@
+enum LABEL_ADDRESS
+{
+	home
+	Shipping
+}
+
+type Address 
+{
+	id: ID!
+	user_id: User! @belongsTo(relation: "user")
+	company_id: Company! @belongsTo(relation: "company")
+	customer_id: Customer! @belongsTo(relation: "customer")
+	label: LABEL_ADDRESS!
+	address: String!
+	country: String!
+	state: String!
+	city: String!
+	province: String!
+	zip_code: String!
+	created_at: Date!
+	updated_at: Date!
+}
+
+input addressUpsert 
+{
+	company_id: ID @rules(apply: ["belongsToMe:companies"])
+	customer_id: ID
+	label: LABEL_ADDRESS!
+	address: String!
+	city: String!
+	state: String!
+	province: String!
+	country: String!
+	zip_code: String!
+}
+
+extend type Query
+{
+	address: [Address!]! @paginate(defaultCount: 10) @admin
+}
+
+
+extend type Mutation
+{
+  addressCreate(input: addressUpsert! @spread): Address! @create
+  addressUpdate(id: ID @rules(apply: ["belongsToMe:address"]) @eq, input: addressUpsert! @spread): Address! @update 
+  addressDelete(id: ID! @rules(apply: ["belongsToMe:address"]) @eq): Address @delete
+}

@@ -1,0 +1,82 @@
+enum SEX 
+{
+  male
+  female
+}
+
+enum SOS 
+{
+  single
+  married
+  divorced
+  widower
+}
+
+type User 
+{
+  id: ID!
+  language_id: Language! @belongsTo(relation: "language")
+  org_id: Origin! @belongsTo(relation: "origin")
+  relp_id: Relationship! @belongsTo(relation: "relationship")
+  role: String!
+  name: String!
+  lastname: String!
+  email: String!
+  sex: SEX
+  dni: String
+  rif: String
+  dob: DateTime
+  sos: SOS
+  refd: Int!
+  ext: Int
+  created_at: Date!
+  updated_at: Date!
+  Ncompanies: Int @count(relation: "companies")
+  Ntickets: Int @count(relation: "tickets")
+  address: [Address!]! @hasMany(type: "paginator")
+  companies: [Company!]! @hasMany
+  phones: [Phone!]! @hasMany(type: "paginator")
+  emails: [Email!]! @hasMany(type: "paginator")
+  # products: [Product!]! @belongsToMany
+  tickets: [Ticket!]! @belongsToMany(type: "paginator")
+  comments: [Comment!]! @hasMany(type: "paginator")
+}
+
+input userUpdate
+{
+  language_id: ID
+  org_id: ID
+  relp_id: ID
+  name: String 
+  lastname: String
+  email: String
+  sex: SEX 
+  dni: String
+  rif: String
+  dob: DateTime
+  sos: SOS
+  refd: Int
+  ext: Int
+}
+
+extend type Query
+{
+  me: User! @auth
+  users: [User!]! @paginate(defaultCount: 10) @admin
+  user(id: ID! @eq): User! @find @admin
+}
+
+extend type Mutation
+{
+  userUpdate(id: ID! @eq, input: userUpdate @lower @spread): User! @update
+  # userUpdate(id: ID! @eq, input: userUpdate @spread): User! @update @broadcast(subscription: "userUpdated")
+  userDelete(id: ID! @eq): User @delete @admin
+
+  userUpgrade(id: ID!): User! @field(resolver: "UserMutate@upgrade")
+  userDowngrade(id: ID!): User! @field(resolver: "UserMutate@downgrade")
+}
+
+extend type Subscription
+{
+  userUpdated: User
+}

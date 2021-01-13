@@ -1,0 +1,28 @@
+type Customer 
+{
+  id: ID!
+  company_id: Company! @belongsTo(relation: "company")
+  name: String!
+  lastname: String!
+  dni: String!
+  rif: String!
+  created_at: Date!
+  updated_at: Date!
+  address: [Address!]! @hasMany
+  emails: [Email!]! @hasMany
+  phones: [Phone!]! @hasMany
+  # products: [Product!]! @hasMany
+  # sales: [Sale!]! @hasMany
+}
+
+extend type Query
+{
+  customers: [Customer!]! @paginate(defaultCount: 10) @admin
+}
+
+extend type Mutation
+{
+  customerCreate(name: String!, abbreviation: String! @spread): Customer! @create @admin
+  customerUpdate(id: ID! @rules(apply: ["exists:currencies"]), name: String!, abbreviation: String! @spread): Customer! @update @admin
+  customerDelete(id: ID! @eq): Customer @delete @admin
+}

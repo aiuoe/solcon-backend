@@ -1,0 +1,20 @@
+type Relationship 
+{
+  id: ID!
+  name: String!
+  users: [User!]! @hasMany(relation: "users", type: "paginator")
+  created_at: Date!
+  updated_at: Date!
+}
+
+extend type Query
+{
+  relationships: [Relationship!]! @all
+}
+
+extend type Mutation
+{
+  relationshipCreate(name: String!, abbreviation: String! @spread): Relationship! @create @admin
+  relationshipUpdate(id: ID!, name: String!, abbreviation: String! @spread): Relationship! @update @admin
+  relationshipDelete(id: ID! @eq): Relationship @delete @admin
+}

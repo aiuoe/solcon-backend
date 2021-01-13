@@ -1,0 +1,23 @@
+type Currency 
+{
+  id: ID!
+  name: String!
+  abbreviation: String!
+  created_at: Date!
+  updated_at: Date!
+  accounts: [Account!]! @hasMany
+  # products: [Product!]! @hasMany
+  # sales: [Sale!]! @hasMany
+}
+
+extend type Query
+{
+  currencies: [Currency!]! @all
+}
+
+extend type Mutation
+{
+  currencyCreate(name: String!, abbreviation: String! @spread): Currency! @create @admin
+  currencyUpdate(id: ID! @rules(apply: ["exists:currencies"]), name: String!, abbreviation: String! @spread): Currency! @update @admin
+  currencyDelete(id: ID! @eq): Currency @delete @admin
+}

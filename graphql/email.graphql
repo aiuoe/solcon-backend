@@ -1,0 +1,22 @@
+type Email 
+{
+	id: ID!
+	user_id: User! @belongsTo(relation: "user")
+	company_id: Company! @belongsTo(relation: "company")
+	customer_id: Customer! @belongsTo(relation: "customer")
+	email: String!
+	created_at: Date!
+  updated_at: Date!
+}
+
+extend type Query
+{
+	emails: [Email!]! @paginate(defaultCount: 10) @admin
+}
+
+extend type Mutation
+{
+  emailCreate(company_id: ID @rules(apply: ["belongsToMe:companies"]), customer_id: ID, user_id: ID, email: String! @lower @spread): Email! @create  
+  emailUpdate(id: ID! @rules(apply: ["belongsToMe:emails"]), company_id: ID @rules(apply: ["belongsToMe:companies"]), customer_id: ID, user_id: ID, email: String! @lower @spread): Email! @update
+  emailDelete(id: ID! @rules(apply: ["belongsToMe:emails"]) @eq): Email @delete
+}

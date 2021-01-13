@@ -1,0 +1,21 @@
+type Comment 
+{
+  id: ID!
+  user_id: User! @belongsTo(relation: "user")
+  ticket_id: Ticket! @belongsTo(relation: "ticket")
+  message: String!
+  created_at: Date!
+  updated_at: Date!
+}
+
+extend type Query
+{
+  comments: [Comment!]! @paginate(defaultCount: 10) @admin
+}
+
+extend type Mutation
+{
+  commentUpsert(id: ID, ticket_id: ID!, message: String! @lower @spread): Comment! @upsert @inject(context: "user.id", name: "user_id")
+  commentDelete(id: ID! @rules(apply: ["belongsToMe:comments"]) @eq): Comment @delete
+}
+

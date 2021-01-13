@@ -1,0 +1,30 @@
+type Company 
+{
+  id: ID!
+  user_id: User! @belongsTo(relation: "user")
+  name: String!
+  rif: String!
+  fyc: Date!
+  created_at: Date!
+  updated_at: Date!
+  accounts: [Account!]! @hasMany(type: "paginator")
+  address: [Address!]! @hasMany(type: "paginator")
+  emails: [Email!]! @hasMany(type: "paginator")
+  phones: [Phone!]! @hasMany(type: "paginator")
+  currencies: [Currency!]! @belongsTo
+  languages: [Language!]! @belongsTo
+  # products: [Product!]! @hasMany(type: "paginator")
+}
+
+extend type Query
+{
+  company(id: ID! @rules(apply: ["belongsToMe:companies"]) @eq): Company! @find
+  companies: [Company!]! @all @admin
+}
+
+extend type Mutation
+{
+  companyCreate(name: String!, rif: String!, fyc: Date! @spread): Company! @create @inject(context: "user.id", name: "user_id") @guard(with: "api")
+  companyUpdate(id: ID! @rules(apply: ["belongsToMe:companies"]), name: String!, rif: String!, fyc: Date! @spread): Company! @update
+  companyDelete(id: ID! @rules(apply: ["belongsToMe:companies"]) @eq): Company @delete
+}

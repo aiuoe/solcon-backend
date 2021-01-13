@@ -1,0 +1,20 @@
+type Origin 
+{
+  id: ID!
+  name: String!
+  users: [User!]! @hasMany(relation: "users")
+  created_at: Date!
+  updated_at: Date!
+}
+
+extend type Query
+{
+  origins: [Origin!]! @all
+}
+
+extend type Mutation
+{
+  originCreate(name: String! @spread): Origin! @create @admin
+  originUpdate(id: ID!, name: String! @spread): Origin! @update @admin
+  originDelete(id: ID! @eq): Origin @delete @admin
+}
