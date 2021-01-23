@@ -28,7 +28,9 @@ class UserRequest extends FormRequest
     public function rules()
     {
         return [
-            'relp_id' => 'string',
+            'relp_id' => 'required|integer',
+            'org_id' => 'required|integer',
+            'language_id' => 'required|integer',
             'name' => 'required|string',
             'lastname' => 'required|string',
             'email' => 'required|email|unique:users',
@@ -37,18 +39,18 @@ class UserRequest extends FormRequest
         ];
     }
 
-    public function messages() {
-        return [
-            'name.required' => 'El nombre es requerido',
-            'lastname.required' => 'El apellido es requerido',
-            'email.required' => 'El correo es requerido',
-            'email.email' => 'Debes introducir un correo valido',
-            'email.unique' => 'El correo ya exite',
-            'password.required' => 'La contraseña es requerida',
-            'refd.integer' => 'El campo referido debe ser numerico',
-            'org_id.integer' => 'El campo origin debe ser numerico',
-        ];
-    }
+    // public function messages() {
+    //     return [
+    //         'name.required' => 'El nombre es requerido',
+    //         'lastname.required' => 'El apellido es requerido',
+    //         'email.required' => 'El correo es requerido',
+    //         'email.email' => 'Debes introducir un correo valido',
+    //         'email.unique' => 'El correo ya exite',
+    //         'password.required' => 'La contraseña es requerida',
+    //         'refd.integer' => 'El campo referido debe ser numerico',
+    //         'org_id.integer' => 'El campo origin debe ser numerico',
+    //     ];
+    // }
 
     protected function failedValidation(Validator $validator)
     {

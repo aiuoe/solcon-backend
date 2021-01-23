@@ -9,7 +9,6 @@ type Phone
 {
 	id: ID!
 	company_id: Company! @belongsTo(relation: "company")
-	customer_id: Customer! @belongsTo(relation: "customer")
 	user_id: User! @belongsTo(relation: "user")
 	label: LABEL_PHONE!
 	phone: String!
@@ -17,14 +16,22 @@ type Phone
   updated_at: Date!
 }
 
-extend type Query
+input phoneInput
 {
-	phones: [Phone!]! @paginate(defaultCount: 10) @admin
+	id: ID @rules(apply: ["belongsToMe:phones"])
+	company_id: ID @rules(apply: ["belongsToMe:companies"])
+	user_id: ID 
+	label: LABEL_PHONE! 
+	phone: String!
 }
+
+# extend type Query
+# {
+# 	phones: [Phone!]! @paginate(defaultCount: 10) @admin
+# }
 
 extend type Mutation
 {
-  phoneCreate(company_id: ID @rules(apply: ["belongsToMe:companies"]), customer_id: ID, user_id: ID, label: LABEL_PHONE!, phone: String! @spread): Phone! @create
-  phoneUpdate(id: ID!, company_id: ID @rules(apply: ["belongsToMe:companies"]), customer_id: ID, user_id: ID, label: LABEL_PHONE, phone: String! @spread): Phone! @update
+  phoneUpsert(input: phoneInput! @spread): Phone! @upsert
   phoneDelete(id: ID! @eq): Phone @delete
 }

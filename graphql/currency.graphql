@@ -6,8 +6,15 @@ type Currency
   created_at: Date!
   updated_at: Date!
   accounts: [Account!]! @hasMany
-  # products: [Product!]! @hasMany
-  # sales: [Sale!]! @hasMany
+  products: [Product!]! @hasMany
+  sales: [Sale!]! @hasMany
+}
+
+input currencyInput
+{
+  id: ID 
+  name: String!  
+  abbreviation: String!  
 }
 
 extend type Query
@@ -17,7 +24,6 @@ extend type Query
 
 extend type Mutation
 {
-  currencyCreate(name: String!, abbreviation: String! @spread): Currency! @create @admin
-  currencyUpdate(id: ID! @rules(apply: ["exists:currencies"]), name: String!, abbreviation: String! @spread): Currency! @update @admin
+  currencyUpsert(input: currencyInput! @lower @spread): Currency! @upsert @admin
   currencyDelete(id: ID! @eq): Currency @delete @admin
 }

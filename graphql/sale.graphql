@@ -1,0 +1,52 @@
+type Sale 
+{
+  id: ID!
+  account_id: Account! @belongsTo(relation: "account")
+  user_id: [User!]! @belongsTo(relation: "user")
+  currency_id: Currency! @belongsTo(relation: "currency")
+  products: [Product!]! @belongsToMany(relation: "products")
+  discount: Float!
+  taxes: Float!
+  amount: Float!
+  paid: Boolean!
+  due_date: Date!
+  pivot: productPivot
+  created_at: Date!
+  updated_at: Date!
+}
+
+input saleInput
+{
+  id: ID
+  account_id: ID!
+  user_id: ID! 
+  currency_id: ID!
+  products: [pivot!]!
+  discount: Float!
+  taxes: Float!
+  amount: Int!
+  paid: Boolean!
+  due_date: Date!
+}
+
+input pivot
+{
+  id: ID!,
+  quantity: Int!
+}
+
+type productPivot
+{
+  quantity: Int!
+}
+
+# extend type Query
+# {
+#   sales: [Sale!]! @paginate(defaultCount: 10) @admin
+# }
+
+extend type Mutation
+{
+  saleUpsert(input: saleInput! @spread): Sale @field(resolver: "SaleMutation@store") 
+  saleDelete(id: ID! @eq): Sale @delete
+}

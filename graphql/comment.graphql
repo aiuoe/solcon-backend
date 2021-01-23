@@ -8,14 +8,21 @@ type Comment
   updated_at: Date!
 }
 
-extend type Query
+input commentInput
 {
-  comments: [Comment!]! @paginate(defaultCount: 10) @admin
+	id: ID 
+	ticket_id: ID! 
+	message: String! @lower
 }
+
+# extend type Query
+# {
+#   comments: [Comment!]! @paginate(defaultCount: 10) @admin
+# }
 
 extend type Mutation
 {
-  commentUpsert(id: ID, ticket_id: ID!, message: String! @lower @spread): Comment! @upsert @inject(context: "user.id", name: "user_id")
+  commentUpsert(input: commentInput! @spread): Comment! @upsert @inject(context: "user.id", name: "user_id")
   commentDelete(id: ID! @rules(apply: ["belongsToMe:comments"]) @eq): Comment @delete
 }
 

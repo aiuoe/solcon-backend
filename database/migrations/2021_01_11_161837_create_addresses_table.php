@@ -15,7 +15,6 @@ class CreateAddressesTable extends Migration
     {
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('customer_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('company_id')->nullable();
             $table->enum('label', ['home', 'Shipping']);
@@ -26,8 +25,6 @@ class CreateAddressesTable extends Migration
             $table->string('province');
             $table->string('zip_code');
             $table->timestamps();
-            $table->foreign('customer_id')->references('id')
-            ->on('customers')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('user_id')->references('id')
             ->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('company_id')->references('id')

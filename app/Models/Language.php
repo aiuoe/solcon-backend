@@ -10,10 +10,7 @@ class Language extends Model
 {
   use HasFactory;
 
-	protected $table = 'languages', $fillable = [
-		'abbreviation', 
-		'name'
-	];
+	protected $table = 'languages', $fillable = ['abbreviation', 'name'];
 	
   public function users(): HasMany
 	{

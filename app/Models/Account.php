@@ -15,9 +15,8 @@ class Account extends Model
 		'company_id', 
 		'currency_id', 
 		'description',
-		'name', 
-		'parent_id', 
-		'type',  
+		'name',
+		'balance',
 	];
 
 	public function company(): BelongsTo
@@ -30,8 +29,8 @@ class Account extends Model
 		return $this->belongsTo(Currency::class);
 	}
 
-	public function sales(): HasMany
+	public function transactions(): HasMany
 	{
-		return $this->hasMany(Sale::class);
+		return $this->hasMany(Transaction::class);
 	}
 }

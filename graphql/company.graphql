@@ -7,24 +7,29 @@ type Company
   fyc: Date!
   created_at: Date!
   updated_at: Date!
-  accounts: [Account!]! @hasMany(type: "paginator")
-  address: [Address!]! @hasMany(type: "paginator")
-  emails: [Email!]! @hasMany(type: "paginator")
-  phones: [Phone!]! @hasMany(type: "paginator")
-  currencies: [Currency!]! @belongsTo
-  languages: [Language!]! @belongsTo
-  # products: [Product!]! @hasMany(type: "paginator")
+  accounts: [Account!]! @hasMany
+  address: [Address!]! @hasMany
+  emails: [Email!]! @hasMany
+  phones: [Phone!]! @hasMany
+  products: [Product!]! @hasMany
 }
 
-extend type Query
+input companyUpsert
 {
-  company(id: ID! @rules(apply: ["belongsToMe:companies"]) @eq): Company! @find
-  companies: [Company!]! @all @admin
+  id: ID @rules(apply: ["belongsToMe:companies"])
+  name: String! @lower
+  rif: String!
+  fyc: Date!
 }
+
+# extend type Query
+# {
+#   company(id: ID! @rules(apply: ["belongsToMe:companies"]) @eq): Company! @find
+#   # companies: [Company!]! @all @admin
+# }
 
 extend type Mutation
 {
-  companyCreate(name: String!, rif: String!, fyc: Date! @spread): Company! @create @inject(context: "user.id", name: "user_id") @guard(with: "api")
-  companyUpdate(id: ID! @rules(apply: ["belongsToMe:companies"]), name: String!, rif: String!, fyc: Date! @spread): Company! @update
+  companyUpsert(input: companyUpsert! @spread): Company! @upsert @inject(context: "user.id", name: "user_id") @guard(with: "api")
   companyDelete(id: ID! @rules(apply: ["belongsToMe:companies"]) @eq): Company @delete
 }

@@ -11,6 +11,9 @@
 #import phone.graphql
 #import ticket.graphql
 #import comment.graphql
+#import tax.graphql
+#import product.graphql
+#import sale.graphql
 
 
 "A date string with format `Y-m-d`, e.g. `2011-05-23`."

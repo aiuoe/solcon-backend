@@ -15,7 +15,7 @@ class UserJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private $relp_id, $name, $lastname, $email, $password, $refd, $org_id;
+    private $relp_id, $language_id, $name, $lastname, $email, $password, $refd, $org_id;
 
     /**
      * Create a new job instance.
@@ -25,12 +25,13 @@ class UserJob implements ShouldQueue
     public function __construct(UserRequest $request)
     {
         $this->relp_id = $request->relp_id;
+        $this->org_id = $request->org_id;
+        $this->language_id = $request->language_id;
         $this->name = strtolower($request->name);
         $this->lastname = strtolower($request->lastname);
         $this->email = strtolower($request->email);
         $this->password = bcrypt($request->password);
         $this->refd = $request->refd;
-        $this->org_id = $request->org_id;
     }
 
     /**
@@ -42,6 +43,7 @@ class UserJob implements ShouldQueue
     {
         User::create([
             'relp_id' => $this->relp_id,
+            'language_id' => $this->language_id,
             'name' => $this->name,
             'lastname' => $this->lastname,
             'email' => $this->email,

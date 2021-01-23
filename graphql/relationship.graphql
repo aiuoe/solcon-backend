@@ -7,6 +7,13 @@ type Relationship
   updated_at: Date!
 }
 
+input relationshipInput
+{
+	id: ID 
+	name: String! 
+	abbreviation: String!
+}
+
 extend type Query
 {
   relationships: [Relationship!]! @all
@@ -14,7 +21,6 @@ extend type Query
 
 extend type Mutation
 {
-  relationshipCreate(name: String!, abbreviation: String! @spread): Relationship! @create @admin
-  relationshipUpdate(id: ID!, name: String!, abbreviation: String! @spread): Relationship! @update @admin
+  relationshipUpsert(input: relationshipInput! @lower @spread): Relationship! @upsert @admin
   relationshipDelete(id: ID! @eq): Relationship @delete @admin
 }

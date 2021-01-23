@@ -15,13 +15,10 @@ class CreateEmailsTable extends Migration
     {
         Schema::create('emails', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('customer_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('company_id')->nullable();
             $table->string('email');
             $table->timestamps();
-            $table->foreign('customer_id')->references('id')
-            ->on('customers')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('user_id')->references('id')
             ->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('company_id')->references('id')

@@ -1,0 +1,28 @@
+type Tax 
+{
+  id: ID!
+  company_id: [Company!]! @belongsTo(relation: "company")
+  name: String!
+  rate: Int!
+  created_at: Date!
+  updated_at: Date!
+}
+
+input taxInput
+{
+  id: ID
+  company_id: ID! @rules(apply: ["belongsToMe:companies"]) 
+  name: String! @lower
+  rate: Int!
+}
+
+# extend type Query
+# {
+#   taxes: [Tax!]! @paginate(defaultCount: 10) @admin
+# }
+
+extend type Mutation
+{
+  taxUpsert(input: taxInput! @spread): Tax! @upsert
+  taxDelete(id: ID! @eq): Tax @delete
+}

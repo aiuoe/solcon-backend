@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Relationship extends Model
+class Tax extends Model
 {
   use HasFactory;
+	
+	protected $table = 'taxes', $fillable = ['company_id', 'name', 'rate'];
 
-	protected $table = 'relationships', $fillable = ['name'];
-
-	public function users(): HasMany
+	public function products(): HasMany
 	{
-		return $this->hasMany(User::class);
-	}
+		return $this->hasMany(Product::class);
+	}    
 }

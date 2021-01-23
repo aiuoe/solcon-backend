@@ -1,0 +1,35 @@
+type Product
+{
+  id: ID!
+  company_id: Company! @belongsTo(relation: "company")
+  currency_id: Currency! @belongsTo(relation: "currency")
+  tax_id: Tax! @belongsTo(relation: "tax")
+  sales: [Sale!]! @belongsToMany(relation: "sales")
+  name: String!
+  description: String!
+  price: Int!
+  created_at: Date!
+  updated_at: Date!
+}
+
+input productInput 
+{
+  id: ID
+  company_id: ID! @rules(apply: ["belongsToMe:companies"])
+  currency_id: ID!
+  tax_id: ID! 
+  name: String!
+  description: String!
+  price: Int!
+}
+
+# extend type Query
+# {
+#   products: [Product!]! @paginate(defaultCount: 10) @admin
+# }
+
+extend type Mutation
+{
+  productUpsert(input: productInput! @lower @spread): Product! @upsert
+  productDelete(id: ID!): Product @delete
+}

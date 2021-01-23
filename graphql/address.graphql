@@ -9,7 +9,6 @@ type Address
 	id: ID!
 	user_id: User! @belongsTo(relation: "user")
 	company_id: Company! @belongsTo(relation: "company")
-	customer_id: Customer! @belongsTo(relation: "customer")
 	label: LABEL_ADDRESS!
 	address: String!
 	country: String!
@@ -21,10 +20,11 @@ type Address
 	updated_at: Date!
 }
 
-input addressUpsert 
+input addressInput 
 {
+	id: ID @rules(apply: ["belongsToMe:address"])
 	company_id: ID @rules(apply: ["belongsToMe:companies"])
-	customer_id: ID
+	user_id: ID
 	label: LABEL_ADDRESS!
 	address: String!
 	city: String!
@@ -34,15 +34,13 @@ input addressUpsert
 	zip_code: String!
 }
 
-extend type Query
-{
-	address: [Address!]! @paginate(defaultCount: 10) @admin
-}
-
+# extend type Query
+# {
+# 	address: [Address!]! @paginate(defaultCount: 10) @admin
+# }
 
 extend type Mutation
 {
-  addressCreate(input: addressUpsert! @spread): Address! @create
-  addressUpdate(id: ID @rules(apply: ["belongsToMe:address"]) @eq, input: addressUpsert! @spread): Address! @update 
+  addressUpsert(input: addressInput! @lower @spread): Address! @upsert 
   addressDelete(id: ID! @rules(apply: ["belongsToMe:address"]) @eq): Address @delete
 }

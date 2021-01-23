@@ -111,9 +111,9 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Phone::class);
     }
 
-    public function products(): HasManyThrough
+    public function purchases(): HasMany
     {
-        return $this->hasManyThrough(Product::class, 'sales');
+        return $this->hasMany(Sale::class);
     }
     
     public function relationship(): BelongsTo

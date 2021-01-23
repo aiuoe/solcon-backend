@@ -33,29 +33,30 @@ type User
   updated_at: Date!
   Ncompanies: Int @count(relation: "companies")
   Ntickets: Int @count(relation: "tickets")
-  address: [Address!]! @hasMany(type: "paginator")
+  address: [Address!]! @hasMany
   companies: [Company!]! @hasMany
-  phones: [Phone!]! @hasMany(type: "paginator")
-  emails: [Email!]! @hasMany(type: "paginator")
-  # products: [Product!]! @belongsToMany
-  tickets: [Ticket!]! @belongsToMany(type: "paginator")
-  comments: [Comment!]! @hasMany(type: "paginator")
+  phones: [Phone!]! @hasMany
+  emails: [Email!]! @hasMany
+  purchases: [Sale!]! @hasMany
+  tickets: [Ticket!]! @belongsToMany
+  comments: [Comment!]! @hasMany
 }
 
 input userUpdate
 {
-  language_id: ID
-  org_id: ID
-  relp_id: ID
-  name: String 
-  lastname: String
-  email: String
+  id: ID!
+  language_id: ID!
+  org_id: ID!
+  relp_id: ID!
+  name: String! 
+  lastname: String!
+  email: String!
   sex: SEX 
   dni: String
   rif: String
   dob: DateTime
   sos: SOS
-  refd: Int
+  refd: Int!
   ext: Int
 }
 
@@ -68,12 +69,11 @@ extend type Query
 
 extend type Mutation
 {
-  userUpdate(id: ID! @eq, input: userUpdate @lower @spread): User! @update
-  # userUpdate(id: ID! @eq, input: userUpdate @spread): User! @update @broadcast(subscription: "userUpdated")
+  userUpdate(input: userUpdate @lower @spread): User! @update
   userDelete(id: ID! @eq): User @delete @admin
 
-  userUpgrade(id: ID!): User! @field(resolver: "UserMutate@upgrade")
-  userDowngrade(id: ID!): User! @field(resolver: "UserMutate@downgrade")
+  userUpgrade(id: ID!): User! @field(resolver: "UserMutation@upgrade")
+  userDowngrade(id: ID!): User! @field(resolver: "UserMutation@downgrade")
 }
 
 extend type Subscription

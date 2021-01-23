@@ -8,6 +8,13 @@ type Language
   updated_at: Date!
 }
 
+input languageInput
+{
+  id: ID 
+  name: String! 
+  abbreviation: String!
+}
+
 extend type Query
 {
   languages: [Language!]! @all
@@ -15,7 +22,6 @@ extend type Query
 
 extend type Mutation
 {
-  languageCreate(name: String!, abbreviation: String! @spread): Language! @create @admin
-  languageUpdate(id: ID!, name: String!, abbreviation: String! @spread): Language! @update @admin
+  languageUpsert(input: languageInput! @lower @spread): Language! @upsert @admin
   languageDelete(id: ID! @eq): Language @delete @admin
 }

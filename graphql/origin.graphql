@@ -14,7 +14,6 @@ extend type Query
 
 extend type Mutation
 {
-  originCreate(name: String! @spread): Origin! @create @admin
-  originUpdate(id: ID!, name: String! @spread): Origin! @update @admin
+  originUpsert(id: ID, name: String! @spread): Origin! @upsert @admin
   originDelete(id: ID! @eq): Origin @delete @admin
 }

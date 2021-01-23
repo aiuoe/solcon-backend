@@ -23,6 +23,8 @@ input userSync
 
 input ticketUpsert
 {
+  # id: ID @rules(apply: ["belongsToManyMe:tickets"])
+  id: ID
   users: userSync! @rules(apply: ["ticketSyncVal"])
   title: String! @lower
   message: String! @lower
@@ -30,19 +32,19 @@ input ticketUpsert
   status: Boolean!
   pinned: Boolean!
   public: Boolean!
-  channel: String! @lower
-  due_date: Date
+  channel: String!
+  due_date: Date!
 }
 
-extend type Query
-{
-  tickets: [Ticket!]! @paginate(defaultCount: 10) @admin
-  ticket(id: ID! @eq): Ticket! @find
-}
+# extend type Query
+# {
+#   tickets: [Ticket!]! @paginate(defaultCount: 10) @admin
+#   ticket(id: ID! @eq): Ticket! @find
+# }
 
 extend type Mutation
 {
-  ticketUpsert(id: ID @rules(apply: ["belongsToManyMe:tickets"]), input: ticketUpsert! @spread): Ticket! @upsert
+  ticketUpsert(input: ticketUpsert! @spread): Ticket! @upsert
   ticketDelete(id: ID! @rules(apply: ["belongsToManyMe:tickets"]) @eq): Ticket @delete
 }
 

@@ -6,7 +6,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use App\Models\User;
 
-class UserMutate
+class UserMutation
 {
 
 	public function upgrade($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
