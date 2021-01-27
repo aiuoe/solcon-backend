@@ -50,28 +50,5 @@ class AppServiceProvider extends ServiceProvider
                  throw new AuthorizationException("Unauthorized");
          }
         });
-
-        Validator::extend('ticketSyncVal', function ($attribute, array $value, $parameters, $validator)
-        {
-         if (auth()->user()->role == 'admin')
-         {
-             if (in_array(auth()->user()->id, $value['sync']))
-                 return true;
-             else
-                 throw new AuthorizationException("Unauthorized");
-         }
-         else
-         {
-             if (count($value['sync']) == 1)
-             {
-                 if (in_array(auth()->user()->id, $value['sync']))
-                     return true;
-                 else
-                     throw new AuthorizationException("Unauthorized");
-             }
-             else
-                 throw new AuthorizationException("Unauthorized");
-         }
-        });
     }
 }

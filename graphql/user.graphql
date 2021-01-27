@@ -31,6 +31,7 @@ type User
   ext: Int
   created_at: Date!
   updated_at: Date!
+  pivot: TicketPivot
   Ncompanies: Int @count(relation: "companies")
   Ntickets: Int @count(relation: "tickets")
   address: [Address!]! @hasMany
@@ -40,6 +41,13 @@ type User
   purchases: [Sale!]! @hasMany
   tickets: [Ticket!]! @belongsToMany
   comments: [Comment!]! @hasMany
+}
+
+type TicketPivot
+{
+  created_by: Boolean
+  updated_by: Boolean
+  closed_by: Boolean
 }
 
 input userUpdate

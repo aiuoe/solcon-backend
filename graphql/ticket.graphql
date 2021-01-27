@@ -16,16 +16,10 @@ type Ticket
   comments: [Comment!]! @hasMany
 }
 
-input userSync
-{
-  sync: [ID!] 
-}
-
 input ticketUpsert
 {
-  # id: ID @rules(apply: ["belongsToManyMe:tickets"])
   id: ID
-  users: userSync! @rules(apply: ["ticketSyncVal"])
+  users: [ID!]
   title: String! @lower
   message: String! @lower
   priority: Boolean!
@@ -44,7 +38,10 @@ input ticketUpsert
 
 extend type Mutation
 {
-  ticketUpsert(input: ticketUpsert! @spread): Ticket! @upsert
-  ticketDelete(id: ID! @rules(apply: ["belongsToManyMe:tickets"]) @eq): Ticket @delete
+  ticketUpsert(input: ticketUpsert! @spread): Ticket! @field(resolver: "TicketMutation@upsert")
+  # ticketUpdate(input: ticketUpdate! @spread): Ticket! @field(resolver: "TicketMutation@update")
+  # ticketDelete(id: ID! @eq): Ticket @field(resolver: "")
+  # ticketUpsert(input: ticketUpsert! @spread): Ticket! @upsert
+  # ticketDelete(id: ID! @rules(apply: ["belongsToManyMe:tickets"]) @eq): Ticket @delete
 }
 

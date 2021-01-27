@@ -124,6 +124,7 @@ class User extends Authenticatable implements JWTSubject
     public function tickets(): BelongsToMany
     {
         return $this->belongsToMany(Ticket::class)
+        ->withPivot('created_by', 'updated_by', 'closed_by')
         ->orderBy('pinned', 'desc')
         ->orderBy('status', 'desc')
         ->orderBy('created_at', 'desc')
