@@ -126,4 +126,9 @@ class TicketMutation
 			'due_date' => $this->due_date
 		]);	
 	}
+
+	public function delete($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
+	{
+		
+	}
 }
