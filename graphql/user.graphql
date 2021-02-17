@@ -35,7 +35,7 @@ type User
   Ncompanies: Int @count(relation: "companies")
   Ntickets: Int @count(relation: "tickets")
   address: [Address!]! @hasMany
-  companies: [Company!]! @hasMany
+  # companies: [Company!]! @hasMany
   phones: [Phone!]! @hasMany
   emails: [Email!]! @hasMany
   purchases: [Sale!]! @hasMany
@@ -52,7 +52,7 @@ type TicketPivot
 
 input userUpdate
 {
-  id: ID!
+  id: ID! @rules(apply: ["auth"])
   language_id: ID!
   org_id: ID!
   relp_id: ID!
@@ -78,7 +78,7 @@ extend type Query
 extend type Mutation
 {
   userUpdate(input: userUpdate @lower @spread): User! @update
-  userDelete(id: ID! @eq): User @delete @admin
+  userDelete(id: ID! @rules(apply: ["auth"]) @eq): User @delete @admin
 
   userUpgrade(id: ID!): User! @field(resolver: "UserMutation@upgrade")
   userDowngrade(id: ID!): User! @field(resolver: "UserMutation@downgrade")

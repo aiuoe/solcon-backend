@@ -30,18 +30,16 @@ input ticketUpsert
   due_date: Date!
 }
 
-# extend type Query
-# {
-#   tickets: [Ticket!]! @paginate(defaultCount: 10) @admin
-#   ticket(id: ID! @eq): Ticket! @find
-# }
+extend type Query
+{
+  tickets(page: Int): [Ticket!]! @paginateAuth(relation: "users" max: 10)
+  # ticket(id: ID! @eq): Ticket! @find
+}
 
 extend type Mutation
 {
   ticketUpsert(input: ticketUpsert! @spread): Ticket! @field(resolver: "TicketMutation@upsert")
   # ticketUpdate(input: ticketUpdate! @spread): Ticket! @field(resolver: "TicketMutation@update")
-  # ticketDelete(id: ID! @eq): Ticket @field(resolver: "")
-  # ticketUpsert(input: ticketUpsert! @spread): Ticket! @upsert
-  # ticketDelete(id: ID! @rules(apply: ["belongsToManyMe:tickets"]) @eq): Ticket @delete
+  ticketDelete(id: ID! @rules(apply: ["has:tickets"]) @eq): Ticket @delete
 }
 

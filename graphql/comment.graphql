@@ -10,7 +10,7 @@ type Comment
 
 input commentInput
 {
-	id: ID 
+	id: ID @rules(apply: ["has:comments"])
 	ticket_id: ID! 
 	message: String! @lower
 }
@@ -22,7 +22,7 @@ input commentInput
 
 extend type Mutation
 {
-  commentUpsert(input: commentInput! @spread): Comment! @upsert @inject(context: "user.id", name: "user_id")
-  commentDelete(id: ID! @rules(apply: ["belongsToMe:comments"]) @eq): Comment @delete
+  commentUpsert(input: commentInput! @spread): Comment! @upsert @inject(context: "user.id", name: "user_id") @guard(with: "api")
+  commentDelete(id: ID! @rules(apply: ["has:comments"]) @eq): Comment @delete
 }
 

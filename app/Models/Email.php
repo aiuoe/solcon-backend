@@ -19,7 +19,8 @@ class Email extends Model
 
   public function company(): BelongsTo
   {
-  	return $this->belongsTo(Company::class);
+  	return $this->belongsTo(Company::class)
+    ->where('user_id', auth()->user()->id);
   }
 
   public function customer(): BelongsTo
@@ -29,6 +30,7 @@ class Email extends Model
 
   public function user(): BelongsTo
   {
-  	return $this->belongsTo(User::class);
+  	return $this->belongsTo(User::class)
+    ->where('id', auth()->user()->id);
   }
 }

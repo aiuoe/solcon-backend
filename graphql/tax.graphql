@@ -10,8 +10,8 @@ type Tax
 
 input taxInput
 {
-  id: ID
-  company_id: ID! @rules(apply: ["belongsToMe:companies"]) 
+  id: ID @rules(apply: ["has:taxes"]) 
+  company_id: ID! @rules(apply: ["has:companies"]) 
   name: String! @lower
   rate: Int!
 }
@@ -24,5 +24,5 @@ input taxInput
 extend type Mutation
 {
   taxUpsert(input: taxInput! @spread): Tax! @upsert
-  taxDelete(id: ID! @eq): Tax @delete
+  taxDelete(id: ID! @rules(apply: ["has:taxes"]) @eq): Tax @delete
 }

@@ -14,8 +14,8 @@ type Product
 
 input productInput 
 {
-  id: ID
-  company_id: ID! @rules(apply: ["belongsToMe:companies"])
+  id: ID @rules(apply: ["has:products"])
+  company_id: ID! @rules(apply: ["has:companies"])
   currency_id: ID!
   tax_id: ID! 
   name: String!
@@ -31,5 +31,5 @@ input productInput
 extend type Mutation
 {
   productUpsert(input: productInput! @lower @spread): Product! @upsert
-  productDelete(id: ID!): Product @delete
+  productDelete(id: ID! @rules(apply: ["has:products"]) @eq): Product @delete
 }

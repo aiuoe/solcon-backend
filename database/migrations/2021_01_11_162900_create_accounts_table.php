@@ -15,7 +15,8 @@ class CreateAccountsTable extends Migration
 	{
 		Schema::create('accounts', function (Blueprint $table) {
 			$table->id();
-			$table->unsignedBigInteger('company_id')->nullable();
+			$table->unsignedBigInteger('company_id');
+			$table->unsignedBigInteger('parent_id')->nullable();
 			$table->enum('type', ['active', 'passive', 'patrimony', 'income', 'expense']);
 			$table->string('name');
 			$table->longText('description')->nullable();

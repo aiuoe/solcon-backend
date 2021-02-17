@@ -10,45 +10,45 @@ use App\Models\User;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        //
-    }
+	/**
+	 * Register any application services.
+	 *
+	 * @return void
+	 */
+	public function register()
+	{
+		//
+	}
 
-    /**
-     * Bootstrap any application services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        Schema::defaultStringLength(191);
+	/**
+	 * Bootstrap any application services.
+	 *
+	 * @return void
+	 */
+	public function boot()
+	{
+		Schema::defaultStringLength(191);
 
-        Validator::extend('belongsToMe', function ($attribute, $value, $parameters, $validator)
-        {
-         if ($value)
-         {
-             if (count(User::find(auth()->user()->id)->{$parameters[0]}()->where('id', $value)->get()))
-                 return true; 
-             else
-                 throw new AuthorizationException("Unauthorized");
-         }
-        });
+		Validator::extend('has', function ($attribute, $value, $parameters, $validator)
+		{
+			if ($value)
+			{
+				if (User::find(auth()->user()->id)->{$parameters[0]}->contains($value))
+					return true; 
+				else
+					throw new AuthorizationException("Unauthorized");
+			}
+		});
 
-        Validator::extend('belongsToManyMe', function ($attribute, $value, $parameters, $validator)
-        {
-         if ($value)
-         {
-             if (count(User::find(auth()->user()->id)->{$parameters[0]}()->where("$parameters[0].id", $value)->get()))
-                 return true; 
-             else
-                 throw new AuthorizationException("Unauthorized");
-         }
-        });
-    }
+		Validator::extend('auth', function ($attribute, $value, $parameters, $validator)
+		{
+			if ($value)
+			{
+				if (auth()->user()->id == $value)
+					return true; 
+				else
+					throw new AuthorizationException("Unauthorized");
+			}
+		});
+	}
 }

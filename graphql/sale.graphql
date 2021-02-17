@@ -40,10 +40,10 @@ type productPivot
   quantity: Int!
 }
 
-# extend type Query
-# {
-#   sales: [Sale!]! @paginate(defaultCount: 10) @admin
-# }
+extend type Query
+{
+  sales(page: Int!): [Sale!]! @paginateAuth(relation: "user" max: 10)
+}
 
 extend type Mutation
 {

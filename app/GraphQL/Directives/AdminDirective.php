@@ -35,12 +35,12 @@ class AdminDirective extends BaseDirective implements FieldMiddleware
     $previousResolver = $fieldValue->getResolver();
 
     return $next($fieldValue->setResolver(function ($root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo) use ($previousResolver) 
-      {
-      	if (auth()->user()->role == 'admin')
-          return $previousResolver($root, $args, $context, $resolveInfo);
-        else
-      		throw new AuthorizationException("Unauthorized");
-      }));
+    {
+    	if (auth()->user()->role == 'admin')
+        return $previousResolver($root, $args, $context, $resolveInfo);
+      else
+    		throw new AuthorizationException("Unauthorized");
+    }));
   }
 
 }

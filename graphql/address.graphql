@@ -22,9 +22,9 @@ type Address
 
 input addressInput 
 {
-	id: ID @rules(apply: ["belongsToMe:address"])
-	company_id: ID @rules(apply: ["belongsToMe:companies"])
-	user_id: ID
+	id: ID @rules(apply: ["has:address"])
+	company_id: ID @rules(apply: ["has:companies"])
+	user_id: ID @rules(apply: ["auth"])
 	label: LABEL_ADDRESS!
 	address: String!
 	city: String!
@@ -34,13 +34,14 @@ input addressInput
 	zip_code: String!
 }
 
-# extend type Query
-# {
-# 	address: [Address!]! @paginate(defaultCount: 10) @admin
-# }
+extend type Query
+{
+	address(page: Int!): [Address!]! @paginateAuth(relation: "user" max: 10)
+	addressCompany(id: ID! page: Int!): [Address!]! @hasManyThroughAuth(relation: "company" max: 10 column: "company_id")
+}
 
 extend type Mutation
 {
   addressUpsert(input: addressInput! @lower @spread): Address! @upsert 
-  addressDelete(id: ID! @rules(apply: ["belongsToMe:address"]) @eq): Address @delete
+  addressDelete(id: ID! @rules(apply: ["has:address"]) @eq): Address @delete
 }

@@ -10,19 +10,20 @@ type Email
 
 input emailInput
 {
-	id: ID @rules(apply: ["belongsToMe:emails"])
-	company_id: ID @rules(apply: ["belongsToMe:companies"])
-	user_id: ID
+	id: ID @rules(apply: ["has:emails"])
+	company_id: ID @rules(apply: ["has:companies"])
+	user_id: ID @rules(apply: ["auth"])
 	email: String!
 }
 
-# extend type Query
-# {
-# 	emails: [Email!]! @paginate(defaultCount: 10) @admin
-# }
+extend type Query
+{
+	emails(page: Int!): [Email!]! @paginateAuth(relation: "user" max: 1)
+	emailsCompany(id: ID! page: Int!): [Email!]! @hasManyThroughAuth(relation: "company" max: 10 column: "company_id")
+}
 
 extend type Mutation
 {
   emailUpsert(input: emailInput! @lower @spread): Email! @upsert
-  emailDelete(id: ID! @rules(apply: ["belongsToMe:emails"]) @eq): Email @delete
+  emailDelete(id: ID! @rules(apply: ["has:emails"]) @eq): Email @delete
 }

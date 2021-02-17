@@ -7,29 +7,28 @@ type Company
   fyc: Date!
   created_at: Date!
   updated_at: Date!
-  accounts: [Account!]! @hasMany
-  address: [Address!]! @hasMany
-  emails: [Email!]! @hasMany
-  phones: [Phone!]! @hasMany
-  products: [Product!]! @hasMany
+  naccounts: Int @count(relation: "accounts")
+  naddress: Int @count(relation: "address")
+  nemails: Int @count(relation: "emails")
+  nphones: Int @count(relation: "phones")
+  nproducts: Int @count(relation: "products")
 }
 
 input companyUpsert
 {
-  id: ID @rules(apply: ["belongsToMe:companies"])
+  id: ID @rules(apply: ["has:companies"])
   name: String! @lower
   rif: String!
   fyc: Date!
 }
 
-# extend type Query
-# {
-#   company(id: ID! @rules(apply: ["belongsToMe:companies"]) @eq): Company! @find
-#   # companies: [Company!]! @all @admin
-# }
+extend type Query
+{
+  companies(page: Int!): [Company!]! @paginateAuth(relation: "user" max: 10)
+}
 
 extend type Mutation
 {
   companyUpsert(input: companyUpsert! @spread): Company! @upsert @inject(context: "user.id", name: "user_id") @guard(with: "api")
-  companyDelete(id: ID! @rules(apply: ["belongsToMe:companies"]) @eq): Company @delete
+  companyDelete(id: ID! @rules(apply: ["has:companies"]) @eq): Company @delete
 }

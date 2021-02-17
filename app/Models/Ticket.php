@@ -30,6 +30,7 @@ class Ticket extends Model
   public function users(): BelongsToMany
   {
   	return $this->belongsToMany(User::class)
+  	->wherePivot('user_id', auth()->user()->id)
   	->withPivot('created_by', 'updated_by', 'closed_by')->withTimestamps();
   }
 }
