@@ -4,7 +4,7 @@ type Company
   user_id: User! @belongsTo(relation: "user")
   name: String!
   rif: String!
-  fyc: Date!
+  fyc: DateTime!
   created_at: Date!
   updated_at: Date!
   naccounts: Int @count(relation: "accounts")

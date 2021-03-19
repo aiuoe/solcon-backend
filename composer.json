@@ -17,6 +17,7 @@
         "mll-lab/laravel-graphql-playground": "^2.4",
         "nuwave/lighthouse": "4.18",
         "pusher/pusher-php-server": "^4.1",
+        "sentry/sentry-laravel": "^2.4",
         "tymon/jwt-auth": "^1.0"
     },
     "require-dev": {

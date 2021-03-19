@@ -8,6 +8,7 @@ use Nuwave\Lighthouse\Support\Contracts\FieldResolver;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use Nuwave\Lighthouse\Schema\Directives\BaseDirective;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class PaginateAuthDirective extends BaseDirective implements FieldResolver
 {
@@ -18,35 +19,6 @@ class PaginateAuthDirective extends BaseDirective implements FieldResolver
     Query multiple model entries as a paginated list.
     """
     directive @paginateAuth(
-      """
-      Which pagination style to use.
-      Allowed values: `paginator`, `connection`.
-      """
-      type: String = "paginator"
-
-      """
-      Specify the class name of the model to use.
-      This is only needed when the default model detection does not work.
-      """
-      model: String
-
-      """
-      Point to a function that provides a Query Builder instance.
-      This replaces the use of a model.
-      """
-      builder: String
-
-      """
-      Apply scopes to the underlying query.
-      """
-      scopes: [String!]
-
-      """
-      Allow clients to query paginated lists without specifying the amount of items.
-      Overrules the `pagination.default_count` setting from `lighthouse.php`.
-      """
-      defaultCount: Int
-
       """
       Limit the maximum amount of items that clients can request from paginated lists.
       Overrules the `pagination.max_count` setting from `lighthouse.php`.
@@ -64,9 +36,18 @@ class PaginateAuthDirective extends BaseDirective implements FieldResolver
     return $fieldValue
     ->setResolver(function ($root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-      return $this->getModelClass()::has($this->directiveArgValue('relation'))
-      ->forPage($args['page'], $this->directiveArgValue('max'))
-      ->get();        
+      if (auth()->user()->{$this->nodeName()}() instanceof HasManyThrough)
+      {
+        return auth()->user()->{$this->nodeName()}()
+        ->where($this->directiveArgValue('column'), $args['id'])
+        ->get()
+        ->forPage($args['page'], $this->directiveArgValue('max') 
+        ?? config('lighthouse.pagination.default_count'));        
+      }
+
+      return auth()->user()->{$this->nodeName()}()->get()
+      ->forPage($args['page'], $this->directiveArgValue('max') 
+        ?? config('lighthouse.pagination.default_count'));        
     });
   }
 

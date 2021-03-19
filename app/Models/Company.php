@@ -43,9 +43,13 @@ class Company extends Model
 		return $this->hasMany(Product::class);
 	}
 
+	public function taxes(): HasMany
+	{
+		return $this->hasMany(Tax::class);
+	}
+
 	public function user(): BelongsTo
   {
-  	return $this->belongsTo(User::class)
-  	->where('id', auth()->user()->id);
+  	return $this->belongsTo(User::class);
   }
 }

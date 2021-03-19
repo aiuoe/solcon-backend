@@ -20,15 +20,15 @@ input phoneInput
 {
 	id: ID @rules(apply: ["has:phones"])
 	company_id: ID @rules(apply: ["has:companies"])
-	user_id: ID 
+	user_id: ID @rules(apply: ["auth"])
 	label: LABEL_PHONE! 
 	phone: String!
 }
 
 extend type Query
 {
-	phones(page: Int!): [Phone!]! @paginateAuth(relation: "user" max: 10)
-	phonesCompany(id: ID! page: Int!): [Phone!]! @hasManyThroughAuth(relation: "company" max: 10 column: "company_id")
+	phones(page: Int!): [Phone!]! @paginateAuth
+	company_phones(id: ID! page: Int!): [Phone!]! @paginateAuth(column: "company_id")
 }
 
 extend type Mutation

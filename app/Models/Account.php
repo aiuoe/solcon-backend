@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Builder;
 use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 
 class Account extends Model
@@ -20,15 +19,13 @@ class Account extends Model
 		'description',
 		'name',
 		'balance',
+		'type',
 	];
 
-	public function get_accounts(Builder $builder, int $company_id): Builder
-	{
-		if (User::find(auth()->user()->id)->companies->contains($company_id))
-	    return $builder->where('company_id', $company_id);
-	  else
-	  	throw new AuthorizationException("Unauthorized");
-	}
+	// public function fill()
+	// {
+	// 	return 
+	// }
 
 	public function company(): BelongsTo
 	{

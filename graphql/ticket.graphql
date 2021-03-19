@@ -27,12 +27,12 @@ input ticketUpsert
   pinned: Boolean!
   public: Boolean!
   channel: String!
-  due_date: Date!
+  due_date: Date
 }
 
 extend type Query
 {
-  tickets(page: Int): [Ticket!]! @paginateAuth(relation: "users" max: 10)
+  tickets(page: Int): [Ticket!]! @paginateAuth
   # ticket(id: ID! @eq): Ticket! @find
 }
 

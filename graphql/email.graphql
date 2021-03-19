@@ -18,8 +18,8 @@ input emailInput
 
 extend type Query
 {
-	emails(page: Int!): [Email!]! @paginateAuth(relation: "user" max: 1)
-	emailsCompany(id: ID! page: Int!): [Email!]! @hasManyThroughAuth(relation: "company" max: 10 column: "company_id")
+	emails(page: Int!): [Email!]! @paginateAuth
+	company_emails(id: ID! page: Int!): [Email!]! @paginateAuth(column: "company_id")
 }
 
 extend type Mutation

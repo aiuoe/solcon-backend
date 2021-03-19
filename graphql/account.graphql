@@ -10,9 +10,9 @@ enum TYPE_ACCOUNT
 type Account
 {
   id: ID! 
+  company_id: Company! @belongsTo(relation: "company")
   name: String!
   description: String
-  company_id: Company! @belongsTo(relation: "company")
   parent_id: ID
   balance: Float!
   type: TYPE_ACCOUNT!
@@ -21,7 +21,7 @@ type Account
 input accountInput
 {
   id: ID
-  company_id: ID! 
+  company_id: ID! @rules(apply: ["has:companies"])
   parent_id: ID
   type: TYPE_ACCOUNT!
   name: String! @lower
@@ -31,7 +31,7 @@ input accountInput
 
 extend type Query
 {
-  accountCompany(id: ID! page: Int!): [Account!]! @hasManyThroughAuth(relation: "company" max: 10 column: "company_id")
+  company_accounts(id: ID! page: Int!): [Account!]! @paginateAuth(column: "company_id")
 }
 
 extend type Mutation

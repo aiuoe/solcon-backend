@@ -22,7 +22,6 @@ class CreateAddressesTable extends Migration
             $table->string('country');
             $table->string('state');
             $table->string('city');
-            $table->string('province');
             $table->string('zip_code');
             $table->timestamps();
             $table->foreign('user_id')->references('id')

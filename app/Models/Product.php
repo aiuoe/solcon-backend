@@ -35,10 +35,4 @@ class Product extends Model
   {
   	return $this->belongsTo(Tax::class);
   }
-
-  public function sales(): BelongsToMany
-  {
-    return $this->belongsToMany(Sale::class)
-    ->withPivot('quantity')->withTimestamps();
-  }
 }

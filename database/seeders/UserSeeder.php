@@ -4,44 +4,30 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Ticket;
 
 class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
-    {
-	  	DB::table('users')->upsert([
-	  		[
-	  			'id' => 1,
-	  			'relp_id' => 1,
-	  			'language_id' => 1,
-	  			'org_id' => 1,
-	  			'refd' => 1,
-	  			'name' => 'ruben',
-	  			'lastname' => 'cortez',
-	  			'email' => 'ruben@dev.com',
-	  			'password' => bcrypt('secret'),
-	        'created_at' => Carbon::now(), 
-	        'updated_at' => Carbon::now()
-	      ],
-	      [
-	  			'id' => 2,
-	  			'relp_id' => 1,
-	  			'language_id' => 1,
-	  			'org_id' => 1,
-	  			'refd' => 1,
-	  			'name' => 'genesis',
-	  			'lastname' => 'pineda',
-	  			'email' => 'genesis@design.com',
-	  			'password' => bcrypt('secret'),
-	        'created_at' => Carbon::now(), 
-	        'updated_at' => Carbon::now()
-	      ]
-    	], ['id']);
-    }
+	/**
+	 * Run the database seeds.
+	 *
+	 * @return void
+	 */
+	public function run()
+	{
+		User::factory(10)
+		->hasCompanies(2)
+		->hasAddresses(4)
+		->hasEmails(5)
+		->hasPhones(6)
+		->hasAttached(
+			Ticket::factory(1000)->create(),
+			[
+			'created_by' => (bool)random_int(0, 1),
+			'updated_by' => (bool)random_int(0, 1),
+			'closed_by' => (bool)random_int(0, 1),
+		])
+		->create();
+	}
 }

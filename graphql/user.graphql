@@ -34,13 +34,6 @@ type User
   pivot: TicketPivot
   Ncompanies: Int @count(relation: "companies")
   Ntickets: Int @count(relation: "tickets")
-  address: [Address!]! @hasMany
-  # companies: [Company!]! @hasMany
-  phones: [Phone!]! @hasMany
-  emails: [Email!]! @hasMany
-  purchases: [Sale!]! @hasMany
-  tickets: [Ticket!]! @belongsToMany
-  comments: [Comment!]! @hasMany
 }
 
 type TicketPivot

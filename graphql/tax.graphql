@@ -1,7 +1,7 @@
 type Tax 
 {
   id: ID!
-  company_id: [Company!]! @belongsTo(relation: "company")
+  company_id: Company! @belongsTo(relation: "company")
   name: String!
   rate: Int!
   created_at: Date!
@@ -16,10 +16,10 @@ input taxInput
   rate: Int!
 }
 
-# extend type Query
-# {
-#   taxes: [Tax!]! @paginate(defaultCount: 10) @admin
-# }
+extend type Query
+{
+  company_taxes(id: ID! page: Int!): [Tax!]! @paginateAuth(column: "company_id")
+}
 
 extend type Mutation
 {

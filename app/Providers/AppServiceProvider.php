@@ -33,7 +33,7 @@ class AppServiceProvider extends ServiceProvider
 		{
 			if ($value)
 			{
-				if (User::find(auth()->user()->id)->{$parameters[0]}->contains($value))
+				if (auth()->user()->{$parameters[0]}->contains($value))
 					return true; 
 				else
 					throw new AuthorizationException("Unauthorized");

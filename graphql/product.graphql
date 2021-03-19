@@ -4,29 +4,28 @@ type Product
   company_id: Company! @belongsTo(relation: "company")
   currency_id: Currency! @belongsTo(relation: "currency")
   tax_id: Tax! @belongsTo(relation: "tax")
-  sales: [Sale!]! @belongsToMany(relation: "sales")
   name: String!
   description: String!
-  price: Int!
+  price: Float!
   created_at: Date!
   updated_at: Date!
 }
 
 input productInput 
 {
-  id: ID @rules(apply: ["has:products"])
+  id: ID @rules(apply: ["has:company_products"])
   company_id: ID! @rules(apply: ["has:companies"])
   currency_id: ID!
-  tax_id: ID! 
+  tax_id: ID! @rules(apply: ["has:company_taxes"])
   name: String!
   description: String!
-  price: Int!
+  price: Float!
 }
 
-# extend type Query
-# {
-#   products: [Product!]! @paginate(defaultCount: 10) @admin
-# }
+extend type Query
+{
+  company_products(id: ID! page: Int!): [Product!]! @paginateAuth(column: "company_id")
+}
 
 extend type Mutation
 {

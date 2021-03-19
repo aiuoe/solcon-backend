@@ -14,7 +14,6 @@ type Address
 	country: String!
 	state: String!
 	city: String!
-	province: String!
 	zip_code: String!
 	created_at: Date!
 	updated_at: Date!
@@ -29,15 +28,14 @@ input addressInput
 	address: String!
 	city: String!
 	state: String!
-	province: String!
 	country: String!
 	zip_code: String!
 }
 
 extend type Query
 {
-	address(page: Int!): [Address!]! @paginateAuth(relation: "user" max: 10)
-	addressCompany(id: ID! page: Int!): [Address!]! @hasManyThroughAuth(relation: "company" max: 10 column: "company_id")
+	addresses(page: Int!): [Address!]! @paginateAuth
+	company_addresses(id: ID! page: Int!): [Address!]! @paginateAuth(column: "company_id")
 }
 
 extend type Mutation
