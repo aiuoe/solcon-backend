@@ -18,6 +18,7 @@ class CreateTaxesTable extends Migration
             $table->unsignedBigInteger('company_id');
             $table->string('name');
             $table->decimal('rate', 10, 2);
+            $table->enum('type', ['income', 'expense']);
             $table->timestamps();
             $table->foreign('company_id')->references('id')
             ->on('companies')->onDelete('cascade')->onUpdate('cascade');

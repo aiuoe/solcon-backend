@@ -4,7 +4,7 @@ enum SEX
   female
 }
 
-enum SOS 
+enum SOCIAL_STATE 
 {
   single
   married
@@ -15,18 +15,18 @@ enum SOS
 type User 
 {
   id: ID!
+  relationship_id: Relationship! @belongsTo(relation: "relationship")
   language_id: Language! @belongsTo(relation: "language")
-  org_id: Origin! @belongsTo(relation: "origin")
-  relp_id: Relationship! @belongsTo(relation: "relationship")
-  role: String!
+  origin_id: Origin! @belongsTo(relation: "origin")
+  role_id: Role! @belongsTo(relation: "roles")
   name: String!
   lastname: String!
   email: String!
   sex: SEX
   dni: String
   rif: String
-  dob: DateTime
-  sos: SOS
+  birth_date: Date
+  social_state: SOCIAL_STATE
   refd: Int!
   ext: Int
   created_at: Date!
